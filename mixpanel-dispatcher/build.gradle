@@ -37,8 +37,8 @@ android {
 }
 
 dependencies {
-    api 'com.batch.android:batch-sdk:1.16.+'
-    api 'com.mixpanel.android:mixpanel-android:5.+'
+    api 'com.batch.android:batch-sdk:1.16.1'
+    api 'com.mixpanel.android:mixpanel-android:5.8.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test.ext:junit:1.1.1'
