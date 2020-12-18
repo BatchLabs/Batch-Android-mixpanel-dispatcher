@@ -1,0 +1,2 @@
+include ':mixpanel-dispatcher'
+rootProject.name='android-mixpanel-dispatcher'
