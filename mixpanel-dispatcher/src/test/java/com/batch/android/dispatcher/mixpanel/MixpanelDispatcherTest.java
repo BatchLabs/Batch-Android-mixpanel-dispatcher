@@ -49,7 +49,7 @@ public class MixpanelDispatcherTest
         mixpanel = PowerMockito.mock(MixpanelAPI.class);
 
         mixpanelDispatcher = new MixpanelDispatcher();
-        mixpanelDispatcher.setMixpanelInstance(mixpanel);
+        mixpanelDispatcher.mixpanelInstance = mixpanel;
     }
 
     @Test
@@ -60,8 +60,8 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "push");
-        expected.put("source", "batch");
+        expected.put("utm_medium", "push");
+        expected.put("$source", "batch");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), Mockito.eq(expected));
@@ -75,10 +75,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "push-batch");
-        expected.put("source", "batchsdk");
-        expected.put("campaign", "yoloswag");
-        expected.put("content", "button1");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "push-batch");
+        expected.put("utm_source", "batchsdk");
+        expected.put("utm_campaign", "yoloswag");
+        expected.put("utm_content", "button1");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), mapEq(expected));
@@ -92,10 +93,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "push-batch");
-        expected.put("source", "[batchsdk]");
-        expected.put("campaign", "yoloswag");
-        expected.put("content", "button1");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "push-batch");
+        expected.put("utm_source", "[batchsdk]");
+        expected.put("utm_campaign", "yoloswag");
+        expected.put("utm_content", "button1");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), mapEq(expected));
@@ -109,10 +111,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "pushbatch01");
-        expected.put("source", "batch-sdk");
-        expected.put("campaign", "154879548754");
-        expected.put("content", "notif001");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "pushbatch01");
+        expected.put("utm_source", "batch-sdk");
+        expected.put("utm_campaign", "154879548754");
+        expected.put("utm_content", "notif001");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_OPEN, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_open"), mapEq(expected));
@@ -126,10 +129,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "pushbatch01");
-        expected.put("source", "[batch-sdk]");
-        expected.put("campaign", "154879548754");
-        expected.put("content", "notif001");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "pushbatch01");
+        expected.put("utm_source", "[batch-sdk]");
+        expected.put("utm_campaign", "154879548754");
+        expected.put("utm_content", "notif001");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_OPEN, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_open"), mapEq(expected));
@@ -148,9 +152,10 @@ public class MixpanelDispatcherTest
                 customPayload);
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "654987");
-        expected.put("source", "jesuisuntest");
-        expected.put("campaign", "heinhein");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "654987");
+        expected.put("utm_source", "jesuisuntest");
+        expected.put("utm_campaign", "heinhein");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), mapEq(expected));
@@ -166,10 +171,11 @@ public class MixpanelDispatcherTest
                 customPayload);
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "654987");
-        expected.put("source", "batchsdk");
-        expected.put("campaign", "yoloswag");
-        expected.put("content", "notif001");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "654987");
+        expected.put("utm_source", "batchsdk");
+        expected.put("utm_campaign", "yoloswag");
+        expected.put("utm_content", "notif001");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_OPEN, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_open"), mapEq(expected));
@@ -183,9 +189,10 @@ public class MixpanelDispatcherTest
                 customPayload);
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "push");
-        expected.put("source", "batchsdk");
-        expected.put("campaign", "yoloswag");
+        expected.put("$source", "batch");
+        expected.put("utm_medium", "push");
+        expected.put("utm_source", "batchsdk");
+        expected.put("utm_campaign", "yoloswag");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_OPEN, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_open"), mapEq(expected));
@@ -200,9 +207,9 @@ public class MixpanelDispatcherTest
                 customPayload);
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "push");
-        expected.put("source", "batch");
-        expected.put("campaign", "yoloswag");
+        expected.put("utm_medium", "push");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "yoloswag");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISMISS, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_dismiss"), mapEq(expected));
@@ -216,9 +223,9 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", null);
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", null);
         expected.put("batch_tracking_id", null);
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_SHOW, payload);
@@ -234,10 +241,10 @@ public class MixpanelDispatcherTest
 
         Map<String, Object> expected = new HashMap();
         expected.put("batch_tracking_id", null);
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", null);
-        expected.put("content", "jesuisuncontent");
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", null);
+        expected.put("utm_content", "jesuisuncontent");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_SHOW, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_show"), mapEq(expected));
@@ -252,10 +259,10 @@ public class MixpanelDispatcherTest
 
         Map<String, Object> expected = new HashMap();
         expected.put("batch_tracking_id", null);
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", null);
-        expected.put("content", "jesuisuncontent");
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", null);
+        expected.put("utm_content", "jesuisuncontent");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_SHOW, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_show"), mapEq(expected));
@@ -269,9 +276,9 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", "jesuisunid");
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "jesuisunid");
         expected.put("batch_tracking_id", "jesuisunid");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_CLICK, payload);
@@ -286,11 +293,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", "jesuisunid");
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "jesuisunid");
         expected.put("batch_tracking_id", "jesuisunid");
-        expected.put("content", "jesuisuncontent");
+        expected.put("utm_content", "jesuisuncontent");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_CLOSE, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_close"), mapEq(expected));
@@ -304,11 +311,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", "jesuisunid");
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "jesuisunid");
         expected.put("batch_tracking_id", "jesuisunid");
-        expected.put("content", "jesuisuncontent00587");
+        expected.put("utm_content", "jesuisuncontent00587");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_SHOW, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_show"), mapEq(expected));
@@ -322,11 +329,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", "jesuisunid");
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "jesuisunid");
         expected.put("batch_tracking_id", "jesuisunid");
-        expected.put("content", "jesuisuncontent002");
+        expected.put("utm_content", "jesuisuncontent002");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_AUTO_CLOSE, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_auto_close"), mapEq(expected));
@@ -340,11 +347,11 @@ public class MixpanelDispatcherTest
                 new HashMap());
 
         Map<String, Object> expected = new HashMap();
-        expected.put("medium", "in-app");
-        expected.put("source", "batch");
-        expected.put("campaign", null);
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", null);
         expected.put("batch_tracking_id", null);
-        expected.put("content", "jesuisuncontent");
+        expected.put("utm_content", "jesuisuncontent");
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_CLICK, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_click"), mapEq(expected));

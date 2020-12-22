@@ -23,10 +23,11 @@ public class MixpanelDispatcher implements BatchEventDispatcher
     /**
      * Mixpanel UTM tag keys
      */
-    private static final String CAMPAIGN = "campaign";
-    private static final String SOURCE = "source";
-    private static final String MEDIUM = "medium";
-    private static final String CONTENT = "content";
+    private static final String CAMPAIGN = "utm_campaign";
+    private static final String SOURCE = "utm_source";
+    private static final String MEDIUM = "utm_medium";
+    private static final String CONTENT = "utm_content";
+    private static final String INTEGRATION_ID = "$source";
 
     /**
      * UTM tag keys
@@ -53,7 +54,7 @@ public class MixpanelDispatcher implements BatchEventDispatcher
     private static final String MESSAGING_CLICK_NAME = "batch_in_app_click";
     private static final String UNKNOWN_EVENT_NAME = "batch_unknown";
 
-    private MixpanelAPI mixpanelInstance = null;
+    MixpanelAPI mixpanelInstance = null;
 
     MixpanelDispatcher()
     {
@@ -93,6 +94,7 @@ public class MixpanelDispatcher implements BatchEventDispatcher
         } else if (type.isMessagingEvent()) {
             mixpanelParams = getInAppParams(payload);
         }
+        mixpanelParams.put(INTEGRATION_ID, "batch");
 
         if (mixpanelInstance != null) {
             mixpanelInstance.trackMap(getMixpanelEventName(type), mixpanelParams);
@@ -107,7 +109,6 @@ public class MixpanelDispatcher implements BatchEventDispatcher
     {
         Map<String, Object> mixpanelParams = new HashMap<>();
         mixpanelParams.put(CAMPAIGN, payload.getTrackingId());
-        mixpanelParams.put(SOURCE, "batch");
         mixpanelParams.put(MEDIUM, "in-app");
         mixpanelParams.put(BATCH_TRACKING_ID, payload.getTrackingId());
 
@@ -135,7 +136,6 @@ public class MixpanelDispatcher implements BatchEventDispatcher
     private static Map<String, Object> getNotificationParams(Batch.EventDispatcher.Payload payload)
     {
         Map<String, Object> mixpanelParams = new HashMap();
-        mixpanelParams.put(SOURCE, "batch");
         mixpanelParams.put(MEDIUM, "push");
 
         String deeplink = payload.getDeeplink();
