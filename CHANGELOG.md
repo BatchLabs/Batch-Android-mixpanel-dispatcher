@@ -1,3 +1,8 @@
+1.1.1
+-----
+
+ * Re-release 1.1.0 on maven central
+
 1.1.0
 -----
 

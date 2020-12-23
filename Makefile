@@ -30,4 +30,7 @@ lint:
 
 ci: clean lint test-coverage aar
 
+publish: aar
+	./gradlew mixpanel-dispatcher:publish
+
 .PHONY: ci sonar check-token
