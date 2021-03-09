@@ -2,6 +2,7 @@ package com.batch.android.dispatcher.mixpanel;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 
 import com.batch.android.Batch;
 import com.batch.android.BatchMessage;
@@ -53,28 +54,13 @@ public class MixpanelDispatcherTest
     }
 
     @Test
-    public void testNotificationNoData() {
-
-        TestEventPayload payload = new TestEventPayload(null,
-                null,
-                new HashMap());
-
-        Map<String, Object> expected = new HashMap();
-        expected.put("utm_medium", "push");
-        expected.put("$source", "batch");
-
-        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
-        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), Mockito.eq(expected));
-    }
-
-    @Test
     public void testNotificationDeeplinkQueryVars() {
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com?utm_source=batchsdk&utm_medium=push-batch&utm_campaign=yoloswag&utm_content=button1",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "push-batch");
         expected.put("utm_source", "batchsdk");
@@ -86,13 +72,28 @@ public class MixpanelDispatcherTest
     }
 
     @Test
+    public void testNotificationNoData() {
+
+        TestEventPayload payload = new TestEventPayload(null,
+                null,
+                new HashMap<>());
+
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("utm_medium", "push");
+        expected.put("$source", "batch");
+
+        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
+        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), Mockito.eq(expected));
+    }
+
+    @Test
     public void testNotificationDeeplinkQueryVarsEncode() {
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com?utm_source=%5Bbatchsdk%5D&utm_medium=push-batch&utm_campaign=yoloswag&utm_content=button1",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "push-batch");
         expected.put("utm_source", "[batchsdk]");
@@ -108,9 +109,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com#utm_source=batch-sdk&utm_medium=pushbatch01&utm_campaign=154879548754&utm_content=notif001",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "pushbatch01");
         expected.put("utm_source", "batch-sdk");
@@ -126,9 +127,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com/test#utm_source=%5Bbatch-sdk%5D&utm_medium=pushbatch01&utm_campaign=154879548754&utm_content=notif001",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "pushbatch01");
         expected.put("utm_source", "[batch-sdk]");
@@ -142,7 +143,7 @@ public class MixpanelDispatcherTest
     @Test
     public void testNotificationCustomPayload() {
 
-        Map<String, String> customPayload = new HashMap();
+        Map<String, String> customPayload = new HashMap<>();
         customPayload.put("utm_medium", "654987");
         customPayload.put("utm_source", "jesuisuntest");
         customPayload.put("utm_campaign", "heinhein");
@@ -151,7 +152,7 @@ public class MixpanelDispatcherTest
                 null,
                 customPayload);
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "654987");
         expected.put("utm_source", "jesuisuntest");
@@ -164,13 +165,13 @@ public class MixpanelDispatcherTest
     @Test
     public void testNotificationDeeplinkPriority() {
         // priority: Custom Payload > Query vars > Fragment vars
-        Map<String, String> customPayload = new HashMap();
+        Map<String, String> customPayload = new HashMap<>();
         customPayload.put("utm_medium", "654987");
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com?utm_source=batchsdk&utm_campaign=yoloswag#utm_source=batch-sdk&utm_medium=pushbatch01&utm_campaign=154879548754&utm_content=notif001",
                 customPayload);
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "654987");
         expected.put("utm_source", "batchsdk");
@@ -183,12 +184,12 @@ public class MixpanelDispatcherTest
 
     @Test
     public void testNotificationDeeplinkNonTrimmed() {
-        Map<String, String> customPayload = new HashMap();
+        Map<String, String> customPayload = new HashMap<>();
         TestEventPayload payload = new TestEventPayload(null,
                 "   \n     https://batch.com?utm_source=batchsdk&utm_campaign=yoloswag     \n ",
                 customPayload);
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("$source", "batch");
         expected.put("utm_medium", "push");
         expected.put("utm_source", "batchsdk");
@@ -201,12 +202,12 @@ public class MixpanelDispatcherTest
     @Test
     public void testNotificationDismissCampaign() {
 
-        Map<String, String> customPayload = new HashMap();
+        Map<String, String> customPayload = new HashMap<>();
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com?utm_campaign=yoloswag",
                 customPayload);
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "push");
         expected.put("$source", "batch");
         expected.put("utm_campaign", "yoloswag");
@@ -220,9 +221,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload(null,
                 null,
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
         expected.put("utm_campaign", null);
@@ -237,9 +238,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com?uTm_ConTENT=jesuisuncontent",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("batch_tracking_id", null);
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
@@ -255,9 +256,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com#UtM_CoNtEnT=jesuisuncontent",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("batch_tracking_id", null);
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
@@ -273,9 +274,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload("jesuisunid",
                 null,
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
         expected.put("utm_campaign", "jesuisunid");
@@ -290,9 +291,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload("jesuisunid",
                 "https://batch.com?utm_content=jesuisuncontent",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
         expected.put("utm_campaign", "jesuisunid");
@@ -308,9 +309,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload("jesuisunid",
                 "https://batch.com#utm_content=jesuisuncontent00587",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
         expected.put("utm_campaign", "jesuisunid");
@@ -322,13 +323,49 @@ public class MixpanelDispatcherTest
     }
 
     @Test
+    public void testInAppCloseError() {
+
+        TestEventPayload payload = new TestEventPayload("jesuisunid",
+                null,
+                new HashMap<>());
+
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "jesuisunid");
+        expected.put("batch_tracking_id", "jesuisunid");
+
+        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_CLOSE_ERROR, payload);
+        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_close_error"), mapEq(expected));
+    }
+
+    @Test
+    public void testInAppWebView() {
+
+        TestEventPayload payload = new TestEventPayload(null,
+                "jesuisunbouton",
+                null,
+                new HashMap<>());
+
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", null);
+        expected.put("batch_tracking_id", null);
+        expected.put("batch_webview_analytics_id", "jesuisunbouton");
+
+        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_WEBVIEW_CLICK, payload);
+        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_webview_click"), mapEq(expected));
+    }
+
+    @Test
     public void testInAppDeeplinkContentPriority() {
 
         TestEventPayload payload = new TestEventPayload("jesuisunid",
                 "https://batch.com?utm_content=jesuisuncontent002#utm_content=jesuisuncontent015",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
         expected.put("utm_campaign", "jesuisunid");
@@ -344,9 +381,9 @@ public class MixpanelDispatcherTest
 
         TestEventPayload payload = new TestEventPayload(null,
                 "https://batch.com?utm_content=jesuisuncontent",
-                new HashMap());
+                new HashMap<>());
 
-        Map<String, Object> expected = new HashMap();
+        Map<String, Object> expected = new HashMap<>();
         expected.put("utm_medium", "in-app");
         expected.put("$source", "batch");
         expected.put("utm_campaign", null);
@@ -361,12 +398,23 @@ public class MixpanelDispatcherTest
 
         private String trackingId;
         private String deeplink;
+        private String webViewAnalyticsID;
         private Map<String, String> customPayload;
 
         TestEventPayload(String trackingId,
-                                String deeplink, Map<String, String> customPayload)
+                         String deeplink,
+                         Map<String, String> customPayload)
+        {
+            this(trackingId, null, deeplink, customPayload);
+        }
+
+        TestEventPayload(String trackingId,
+                         String webViewAnalyticsID,
+                         String deeplink,
+                         Map<String, String> customPayload)
         {
             this.trackingId = trackingId;
+            this.webViewAnalyticsID = webViewAnalyticsID;
             this.deeplink = deeplink;
             this.customPayload = customPayload;
         }
@@ -376,6 +424,12 @@ public class MixpanelDispatcherTest
         public String getTrackingId()
         {
             return trackingId;
+        }
+
+        @Nullable
+        @Override
+        public String getWebViewAnalyticsID() {
+            return webViewAnalyticsID;
         }
 
         @Nullable
