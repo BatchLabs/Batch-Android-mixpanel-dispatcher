@@ -4,7 +4,7 @@
 Batch.com Android Mixpanel Dispatcher
 ==================
 
-![Logo](http://batch-doc.s3.amazonaws.com/logo_batch_192.gif)
+![Logo](https://static.batch.com/documentation/Readmes/logo_batch_full_178.png)
 
 # About
 
@@ -13,14 +13,14 @@ A "ready-to-go" dispatcher that reflect event from the Batch SDK to Mixpanel usi
 # Requirements
  - Android Studio 3.0+
  - Android 15+
- - Batch Android SDK 1.15.0+
+ - Batch Android SDK 1.17.0+
  - Mixpanel 5+
 
 # Installation
 Gradle (recommended)
 
 ```
-implementation 'com.batch.android:mixpanel-dispatcher:1.0.0'
+implementation 'com.batch.android:mixpanel-dispatcher:2.0.0'
 ```
 
 Read our [setup documentation](https://doc.batch.com/) to follow a step by step tutorial for integrating Batch features into your app.
