@@ -2,6 +2,7 @@ package com.batch.android.dispatcher.mixpanel;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 
 import com.batch.android.Batch;
 import com.batch.android.BatchMessage;
@@ -53,21 +54,6 @@ public class MixpanelDispatcherTest
     }
 
     @Test
-    public void testNotificationNoData() {
-
-        TestEventPayload payload = new TestEventPayload(null,
-                null,
-                new HashMap());
-
-        Map<String, Object> expected = new HashMap();
-        expected.put("utm_medium", "push");
-        expected.put("$source", "batch");
-
-        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
-        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), Mockito.eq(expected));
-    }
-
-    @Test
     public void testNotificationDeeplinkQueryVars() {
 
         TestEventPayload payload = new TestEventPayload(null,
@@ -83,6 +69,21 @@ public class MixpanelDispatcherTest
 
         mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
         Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), mapEq(expected));
+    }
+
+    @Test
+    public void testNotificationNoData() {
+
+        TestEventPayload payload = new TestEventPayload(null,
+                null,
+                new HashMap());
+
+        Map<String, Object> expected = new HashMap();
+        expected.put("utm_medium", "push");
+        expected.put("$source", "batch");
+
+        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.NOTIFICATION_DISPLAY, payload);
+        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_notification_display"), Mockito.eq(expected));
     }
 
     @Test
@@ -322,6 +323,42 @@ public class MixpanelDispatcherTest
     }
 
     @Test
+    public void testInAppCloseError() {
+
+        TestEventPayload payload = new TestEventPayload("jesuisunid",
+                null,
+                new HashMap());
+
+        Map<String, Object> expected = new HashMap();
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", "jesuisunid");
+        expected.put("batch_tracking_id", "jesuisunid");
+
+        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_CLOSE_ERROR, payload);
+        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_close_error"), mapEq(expected));
+    }
+
+    @Test
+    public void testInAppWebView() {
+
+        TestEventPayload payload = new TestEventPayload(null,
+                "jesuisunbouton",
+                null,
+                new HashMap<>());
+
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("utm_medium", "in-app");
+        expected.put("$source", "batch");
+        expected.put("utm_campaign", null);
+        expected.put("batch_tracking_id", null);
+        expected.put("batch_webview_analytics_id", "jesuisunbouton");
+
+        mixpanelDispatcher.dispatchEvent(Batch.EventDispatcher.Type.MESSAGING_WEBVIEW_CLICK, payload);
+        Mockito.verify(mixpanel).trackMap(Mockito.eq("batch_in_app_webview_click"), mapEq(expected));
+    }
+
+    @Test
     public void testInAppDeeplinkContentPriority() {
 
         TestEventPayload payload = new TestEventPayload("jesuisunid",
@@ -361,12 +398,23 @@ public class MixpanelDispatcherTest
 
         private String trackingId;
         private String deeplink;
+        private String webViewAnalyticsID;
         private Map<String, String> customPayload;
 
         TestEventPayload(String trackingId,
-                                String deeplink, Map<String, String> customPayload)
+                         String deeplink,
+                         Map<String, String> customPayload)
+        {
+            this(trackingId, null, deeplink, customPayload);
+        }
+
+        TestEventPayload(String trackingId,
+                         String webViewAnalyticsID,
+                         String deeplink,
+                         Map<String, String> customPayload)
         {
             this.trackingId = trackingId;
+            this.webViewAnalyticsID = webViewAnalyticsID;
             this.deeplink = deeplink;
             this.customPayload = customPayload;
         }
@@ -376,6 +424,12 @@ public class MixpanelDispatcherTest
         public String getTrackingId()
         {
             return trackingId;
+        }
+
+        @Nullable
+        @Override
+        public String getWebViewAnalyticsID() {
+            return webViewAnalyticsID;
         }
 
         @Nullable
