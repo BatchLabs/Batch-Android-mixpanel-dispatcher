@@ -1,4 +1,4 @@
-UPCOMING
+2.0.0
 -----
 
  * Added support for Batch WebView In-App format. The dispatcher now requires Batch 1.17 or higher.
