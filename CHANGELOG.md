@@ -1,3 +1,8 @@
+UPCOMING
+-----
+
+* Fixed an issue where Batch would crash when a non-hierarchical URI was parsed in a deeplink.
+
 2.0.0
 -----
 
