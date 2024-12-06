@@ -1,6 +1,9 @@
-UPCOMING
+3.0.0
 -----
 
+* Updated Batch to 2.1
+* Batch requires Android min SDK level 21 or higher.
+* Batch requires to compile with SDK 35 (Android 15).
 * Fixed an issue where Batch would crash when a non-hierarchical URI was parsed in a deeplink.
 
 2.0.0
