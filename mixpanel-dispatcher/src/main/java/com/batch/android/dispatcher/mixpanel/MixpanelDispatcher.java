@@ -126,17 +126,22 @@ public class MixpanelDispatcher implements BatchEventDispatcher
 
         String deeplink = payload.getDeeplink();
         if (deeplink != null) {
-            deeplink = deeplink.trim();
-            Uri uri = Uri.parse(deeplink);
-
-            String fragment = uri.getFragment();
-            if (fragment != null && !fragment.isEmpty()) {
-                Map<String, String> fragments = getFragmentMap(fragment);
-                // Copy from fragment part of the deeplink
-                copyValueFromMap(fragments, UTM_CONTENT, mixpanelParams, CONTENT);
+            try {
+                deeplink = deeplink.trim();
+                Uri uri = Uri.parse(deeplink);
+                if (uri.isHierarchical()) {
+                    String fragment = uri.getFragment();
+                    if (fragment != null && !fragment.isEmpty()) {
+                        Map<String, String> fragments = getFragmentMap(fragment);
+                        // Copy from fragment part of the deeplink
+                        copyValueFromMap(fragments, UTM_CONTENT, mixpanelParams, CONTENT);
+                    }
+                    // Copy from query parameters of the deeplink
+                    copyValueFromQuery(uri, UTM_CONTENT, mixpanelParams, CONTENT);
+                }
+            } catch (Exception e) {
+                Log.e("BatchMixpanelDispatcher", "Something went wrong parsing deeplink: " + e.getLocalizedMessage());
             }
-            // Copy from query parameters of the deeplink
-            copyValueFromQuery(uri, UTM_CONTENT, mixpanelParams, CONTENT);
         }
         // Load from custom payload
         copyValueFromPayload(payload, UTM_CAMPAIGN, mixpanelParams, CAMPAIGN);
@@ -152,24 +157,29 @@ public class MixpanelDispatcher implements BatchEventDispatcher
 
         String deeplink = payload.getDeeplink();
         if (deeplink != null) {
-            deeplink = deeplink.trim();
-            Uri uri = Uri.parse(deeplink);
+            try {
+                deeplink = deeplink.trim();
+                Uri uri = Uri.parse(deeplink);
+                if(uri.isHierarchical()) {
+                    String fragment = uri.getFragment();
+                    if (fragment != null && !fragment.isEmpty()) {
+                        Map<String, String> fragments = getFragmentMap(fragment);
+                        // Copy from fragment part of the deeplink
+                        copyValueFromMap(fragments, UTM_CAMPAIGN, mixpanelParams, CAMPAIGN);
+                        copyValueFromMap(fragments, UTM_MEDIUM, mixpanelParams, MEDIUM);
+                        copyValueFromMap(fragments, UTM_SOURCE, mixpanelParams, SOURCE);
+                        copyValueFromMap(fragments, UTM_CONTENT, mixpanelParams, CONTENT);
+                    }
 
-            String fragment = uri.getFragment();
-            if (fragment != null && !fragment.isEmpty()) {
-                Map<String, String> fragments = getFragmentMap(fragment);
-                // Copy from fragment part of the deeplink
-                copyValueFromMap(fragments, UTM_CAMPAIGN, mixpanelParams, CAMPAIGN);
-                copyValueFromMap(fragments, UTM_MEDIUM, mixpanelParams, MEDIUM);
-                copyValueFromMap(fragments, UTM_SOURCE, mixpanelParams, SOURCE);
-                copyValueFromMap(fragments, UTM_CONTENT, mixpanelParams, CONTENT);
+                    // Copy from query parameters of the deeplink
+                    copyValueFromQuery(uri, UTM_CAMPAIGN, mixpanelParams, CAMPAIGN);
+                    copyValueFromQuery(uri, UTM_MEDIUM, mixpanelParams, MEDIUM);
+                    copyValueFromQuery(uri, UTM_SOURCE, mixpanelParams, SOURCE);
+                    copyValueFromQuery(uri, UTM_CONTENT, mixpanelParams, CONTENT);
+                }
+            } catch (Exception e) {
+                Log.e("BatchMixpanelDispatcher", "Something went wrong parsing deeplink: " + e.getLocalizedMessage());
             }
-
-            // Copy from query parameters of the deeplink
-            copyValueFromQuery(uri, UTM_CAMPAIGN, mixpanelParams, CAMPAIGN);
-            copyValueFromQuery(uri, UTM_MEDIUM, mixpanelParams, MEDIUM);
-            copyValueFromQuery(uri, UTM_SOURCE, mixpanelParams, SOURCE);
-            copyValueFromQuery(uri, UTM_CONTENT, mixpanelParams, CONTENT);
         }
         // Load from custom payload
         copyValueFromPayload(payload, UTM_CAMPAIGN, mixpanelParams, CAMPAIGN);
