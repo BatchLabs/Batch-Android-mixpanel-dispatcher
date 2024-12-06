@@ -6,13 +6,14 @@ configurations {
 }
 
 jacoco {
-    toolVersion = '0.8.5'
+    toolVersion = '0.8.12'
 }
 
 def offline_instrumented_outputDir = "$buildDir.path/intermediates/classes-instrumented/debug"
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
 }
 
 /* This task is used to create offline instrumentation of classes for on-the-fly instrumentation coverage tool like Jacoco. See jacoco classId
@@ -43,7 +44,7 @@ task testDebugCoverageUnitTest(dependsOn: ['instrument', 'testDebugUnitTest']) {
             structure(name: 'DispatcherCoverage') {
                 classfiles {
                     fileset(
-                            dir: "$buildDir/intermediates/javac/debug/classes",
+                            dir: "$buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes",
                             excludes: '**/R.class,**/R$*.class,**/BuildConfig.*'
                     )
                 }
@@ -83,7 +84,7 @@ task instrument(dependsOn:'compileDebugUnitTestSources') {
                 classpath: configurations.jacocoAnt.asPath)
 
         ant.instrument(destdir: offline_instrumented_outputDir) {
-            fileset(dir: "$buildDir.path/intermediates/javac/debug/classes")
+            fileset(dir: "$buildDir.path/intermediates/javac/debug/compileDebugJavaWithJavac/classes")
         }
     }
 }

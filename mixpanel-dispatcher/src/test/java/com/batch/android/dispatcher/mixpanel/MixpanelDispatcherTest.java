@@ -1,8 +1,6 @@
 package com.batch.android.dispatcher.mixpanel;
 
-import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
 
 import com.batch.android.Batch;
 import com.batch.android.BatchMessage;
@@ -10,15 +8,13 @@ import com.batch.android.BatchPushPayload;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.HashMap;
@@ -28,25 +24,19 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 /**
  * Test the Mixpanel Event Dispatcher implementation
  */
-@RunWith(AndroidJUnit4.class)
 @Config(sdk = Build.VERSION_CODES.O_MR1)
-@PowerMockIgnore({"org.powermock.*", "org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
+@RunWith(RobolectricTestRunner.class)
 @PrepareForTest(MixpanelAPI.class)
-public class MixpanelDispatcherTest
-{
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
+public class MixpanelDispatcherTest {
     private MixpanelAPI mixpanel;
     private MixpanelDispatcher mixpanelDispatcher;
 
     @Before
     public void setUp() {
-        Context context = PowerMockito.mock(Context.class);
         mixpanel = PowerMockito.mock(MixpanelAPI.class);
 
         mixpanelDispatcher = new MixpanelDispatcher();

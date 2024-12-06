@@ -7,11 +7,11 @@ ext {
 }
 
 android {
-    compileSdkVersion 30
+    namespace "com.batch.android.dispatcher.mixpanel"
+    compileSdk 35
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 30
+        minSdkVersion 21
         versionCode 2
         versionName "2.0.0"
 
@@ -27,6 +27,7 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            returnDefaultValues = true
             all {
                 testLogging {
                     events "started", "passed", "skipped", "failed"
@@ -37,22 +38,18 @@ android {
 }
 
 dependencies {
-    api 'com.batch.android:batch-sdk:1.17.0'
+    api 'com.batch.android:batch-sdk:2.1.0'
     api 'com.mixpanel.android:mixpanel-android:5.8.0'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'androidx.test.ext:junit:1.1.1'
-    testImplementation 'org.mockito:mockito-core:3.2.4'
-    testImplementation 'org.robolectric:robolectric:4.3.1'
-    testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.12.2'
 
     // We use PowerMock to mock Mixpanel in tests
-    testImplementation 'org.powermock:powermock-module-junit4:2.0.4'
-    testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.4'
-    testImplementation 'org.powermock:powermock-api-mockito2:2.0.4'
-    testImplementation 'org.powermock:powermock-classloading-xstream:2.0.4'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
+    testImplementation 'org.powermock:powermock-module-junit4-rule-agent:2.0.9'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
+    testImplementation 'org.powermock:powermock-classloading-xstream:2.0.9'
 }
 
 apply from: 'maven-publish.gradle'
 apply from: 'jacoco.gradle'
-apply from: 'sonar.gradle'
